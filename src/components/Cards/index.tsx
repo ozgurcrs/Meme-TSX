@@ -1,7 +1,7 @@
-import React, { FC } from "react";
-import { Grid, styled } from "@mui/material";
-import { CustomButton } from "../Button";
-import AirlineSeatLegroomReducedIcon from "@mui/icons-material/AirlineSeatLegroomReduced";
+import React, { FC } from 'react';
+import { Grid, styled } from '@mui/material';
+import { CustomButton } from '../Button';
+import AirlineSeatLegroomReducedIcon from '@mui/icons-material/AirlineSeatLegroomReduced';
 
 const CardsWrapper = styled(Grid)`
   height: 100vh;
@@ -55,8 +55,8 @@ type Props = {
 export const Cards: FC<Props> = ({ createMeme, label, data }) => {
   return (
     <CardsWrapper xs={12} container>
-      {data.map((item: any) => (
-        <Card xs={8} sm={2}>
+      {data.map((item: any, index) => (
+        <Card item={true} key={index} xs={8} sm={2}>
           <img src={item.url} alt="testini" loading="lazy" />
           <CustomButton
             icon={<AirlineSeatLegroomReducedIcon />}

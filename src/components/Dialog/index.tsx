@@ -1,15 +1,15 @@
-import React from "react";
-
+import React, { useEffect, useContext } from 'react';
 import {
   styled,
   Dialog,
   DialogActions,
   DialogContent,
-  TextField,
   Box,
-} from "@mui/material";
-import { CustomButton } from "../Button";
-
+} from '@mui/material';
+import { CustomButton } from '../Button';
+import { TextInput } from '../TextField';
+import { useForm } from 'react-hook-form';
+import { memeStoreContext } from '../../context';
 const ContentWrapper = styled(DialogContent)`
   height: auto;
   display: flex;
@@ -44,38 +44,31 @@ type Props = {
   showDialog: boolean;
   handleClose: () => void;
   selectedMeme: any;
-  textField: any;
-  setText: any;
-  onClick: () => void;
+  setShowDialog: Function;
+  setShowPopup: Function;
 };
 
 export const CustomDialog: React.FC<Props> = ({
   showDialog,
   handleClose,
   selectedMeme,
-  onClick,
-  textField,
-  setText,
+  setShowDialog,
+  setShowPopup,
 }) => {
-  const handleChange = (e: any, index: any) => {
-    const value = [...textField];
-    value[index]["text"] = e.target.value;
-    setText(value);
-  };
+  const { register, handleSubmit, reset } = useForm();
+  const { saveMeme }: any = useContext(memeStoreContext);
+  useEffect(() => {
+    reset();
+  }, [reset, showDialog]);
 
-  const handleSave = () => {
-    const value = [...textField];
-    const text0 = value[0]["text"];
-    const text1 = value[1]["text"];
-
-    const url = `https://api.imgflip.com/caption_image?template_id=${selectedMeme.id}&username=ozgurcrs&password=ozgur123&text0=${text0}&text1=${text1}`;
-
-    fetch(url)
-      .then((response) => response.json())
-      .then((result) => {
-        console.log(result);
-        selectedMeme.url = result.data.url;
-      });
+  const handleSave = async (data) => {
+    const payload = {
+      ...data,
+      id: selectedMeme.id,
+    };
+    await saveMeme(payload);
+    setShowPopup(true);
+    setShowDialog(false);
   };
 
   return (
@@ -90,20 +83,21 @@ export const CustomDialog: React.FC<Props> = ({
           <img src={selectedMeme.url} alt="meme" loading="lazy" />
         </ContentBox>
         <ContentBox>
-          {textField.map((item: any, index: any) => (
-            <TextField
-              id="outlined-basic"
-              label="Outlined"
-              variant="outlined"
-              onChange={(e) => handleChange(e, index)}
+          {[...Array(selectedMeme.box_count)].map((x, i) => (
+            <TextInput
+              key={i}
+              label={`Text-${i + 1}`}
+              index={i}
+              register={register}
             />
           ))}
         </ContentBox>
       </ContentWrapper>
+
       <DialogActions>
         <CustomButton
           label="Save Meme"
-          onClick={() => handleSave()}
+          onClick={handleSubmit(handleSave)}
         ></CustomButton>
       </DialogActions>
     </Dialog>

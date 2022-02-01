@@ -1,5 +1,5 @@
-import React from "react";
-import { MemeApp } from "./container/";
+import React, { useEffect } from 'react';
+import { MemeApp } from './container/';
 
 const App: React.FC = () => {
   return (

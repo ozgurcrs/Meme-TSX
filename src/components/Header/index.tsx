@@ -1,5 +1,5 @@
-import React from "react";
-import { Grid, styled, Typography } from "@mui/material";
+import React from 'react';
+import { Grid, styled, Typography } from '@mui/material';
 
 const HeaderWrapper = styled(Grid)`
   height: 200px;
@@ -19,7 +19,7 @@ type Props = {
 export const Header: React.FC<Props> = ({ label }) => {
   return (
     <HeaderWrapper xs={12}>
-      <LogoText variant="h3"> {`<memoli />`}</LogoText>
+      <LogoText variant="h3"> {label}</LogoText>
     </HeaderWrapper>
   );
 };
